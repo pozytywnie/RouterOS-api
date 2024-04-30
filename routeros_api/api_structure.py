@@ -28,7 +28,7 @@ class StringField(Field):
         return string.encode()
 
     def get_python_value(self, bytes):
-        return bytes.decode()
+        return bytes.decode('latin-1')
 
 
 class BytesField(Field):
@@ -53,7 +53,7 @@ class IntegerField(Field):
         return str(number).encode()
 
     def get_python_value(self, bytes):
-        return int(bytes.decode())
+        return int(bytes.decode('latin-1'))
 
 
 class TimedeltaField(Field):
@@ -68,7 +68,7 @@ class TimedeltaField(Field):
         if bytes == b'none':
             return None
         else:
-            return self.parse_mikrotik_timedelta(bytes.decode())
+            return self.parse_mikrotik_timedelta(bytes.decode('latin-1'))
 
     def parse_mikrotik_timedelta(self, time_string):
         new_timedelta_format = (
@@ -100,7 +100,7 @@ class IpNetworkField(Field):
 
     def get_python_value(self, bytes):
         if bytes:
-            return ipaddress.ip_network(bytes.decode())
+            return ipaddress.ip_network(bytes.decode('latin-1'))
         else:
             return None
 
