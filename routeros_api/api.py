@@ -18,6 +18,12 @@ class RouterOsApiPool(object):
 
     def __init__(self, host, username='admin', password='', port=None, plaintext_login=False, use_ssl=False, ssl_verify=True, ssl_verify_hostname=True, ssl_context=None):
         self.host = host
+
+        if isinstance(username, bytes):
+            username = username.decode()
+        if isinstance(password, bytes):
+            password = password.decode()
+
         self.username = username
         self.password = password
 
@@ -77,12 +83,13 @@ class RouterOsApi(object):
         self.communicator = communicator
 
     def login(self, login, password, plaintext_login):
+        if isinstance(login, str):
+            login = login.encode()
+        if isinstance(password, str):
+            password = password.encode()
+
         response = None
         if plaintext_login:
-            if isinstance(login, str):
-                login = login.encode()
-            if isinstance(password, str):
-                password = password.encode()
             response = self.get_binary_resource('/').call('login',{ 'name': login, 'password': password })
         else:
             response = self.get_binary_resource('/').call('login')
@@ -90,11 +97,11 @@ class RouterOsApi(object):
             token = binascii.unhexlify(response.done_message['ret'])
             hasher = hashlib.md5()
             hasher.update(b'\x00')
-            hasher.update(password.encode())
+            hasher.update(password)
             hasher.update(token)
             hashed = b'00' + hasher.hexdigest().encode('ascii')
             self.get_binary_resource('/').call(
-                'login', {'name': login.encode(), 'response': hashed})
+                'login', {'name': login, 'response': hashed})
 
     def get_resource(self, path, structure=None):
         structure = structure or api_structure.default_structure
