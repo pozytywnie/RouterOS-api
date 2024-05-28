@@ -4,6 +4,8 @@ import datetime
 import ipaddress
 import re
 
+import chardet
+
 
 class Field(object):
     __metaclass__ = abc.ABCMeta
@@ -28,6 +30,8 @@ class StringField(Field):
         return string.encode()
 
     def get_python_value(self, bytes):
+        if bytes:
+            return bytes.decode(chardet.detect(bytes)['encoding'])
         return bytes.decode()
 
 
