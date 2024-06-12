@@ -67,3 +67,16 @@ class TestTypedResource(unittest.TestCase):
         communicator.call.assert_called_with(
             '/boolean/', 'set', arguments={'boolean': b'yes'}, queries={},
             additional_queries=())
+
+        
+    def test_unicode_decode_error(self):
+        string = structure.StringField
+        output = string.get_python_value(string,bytes=b'\xc2')
+        self.assertEqual(output, 'Â')
+        
+        
+    
+    def test_blank_decode_byte(self):
+        string = structure.StringField
+        output = string.get_python_value(string,bytes=b'')
+        self.assertEqual(output, '')
