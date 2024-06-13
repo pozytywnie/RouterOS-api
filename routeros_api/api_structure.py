@@ -2,7 +2,11 @@ import abc
 import collections
 import datetime
 import ipaddress
+import os
 import re
+
+
+ROUTEROS_ENCODING = os.environ.get('ROUTEROS_ENCODING', 'utf-8')
 
 
 class Field(object):
@@ -28,7 +32,7 @@ class StringField(Field):
         return string.encode()
 
     def get_python_value(self, bytes):
-        return bytes.decode()
+        return bytes.decode(encoding=ROUTEROS_ENCODING, errors='ignore')
 
 
 class BytesField(Field):
