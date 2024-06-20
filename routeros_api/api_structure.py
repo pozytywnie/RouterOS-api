@@ -28,7 +28,7 @@ class StringField(Field):
         return string.encode()
 
     def get_python_value(self, bytes):
-        return bytes.decode()
+        return bytes.decode('cp1251')
 
 
 class BytesField(Field):
