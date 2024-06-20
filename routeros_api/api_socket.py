@@ -28,6 +28,7 @@ def get_socket(hostname, port, use_ssl=False, ssl_verify=True, ssl_verify_hostna
         if ssl_verify:
             ssl_context.check_hostname = ssl_verify_hostname
             ssl_context.verify_mode = ssl.CERT_REQUIRED
+            ssl_context.set_ciphers("ADH:ALL:@SECLEVEL=0")
         else:
             ssl_context.check_hostname = False
             ssl_context.verify_mode = ssl.CERT_NONE
